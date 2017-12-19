@@ -8,6 +8,12 @@ Key Features
 - Supports IoT entities to register, publish, subscribe, access historical data.
 - Supports asynchronous access of data from the entity.
 
+Installation
+============
+    ``$ python3 -m pip install ideam``
+
+**NOTE**: Python2 is not supported.
+
 Getting started
 ===============
 Using this FORM_, you can register yourself with the middleware.
