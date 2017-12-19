@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 import os
 install_requires = ['chardet', 'multidict>=3.0.0',
                     'async_timeout>=1.2.0', 'yarl>=0.11', 'aiohttp>=2.3.0']
@@ -10,13 +10,13 @@ def read(f):
 setup(
   name='ideam',
   packages=['ideam'],
-  version='0.0.1',
-  long_description='\n\n'.join((read('README.rst'), read('CHANGES.rst'))),
+  version='0.0.2',
+  long_description='\n\n\n'.join(read('README.rst')),
   description='Python SDK for IoT Data Exchange & Analytics Middleware',
   author='Harish Anand',
   author_email='smartcity@rbccps.org',
   url='https://github.com/rbccps-iisc/ideam-python-sdk',
-  download_url='https://github.com/rbccps-iisc/ideam-python-sdk/archive/0.0.1.tar.gz',
+  download_url='https://github.com/rbccps-iisc/ideam-python-sdk/archive/0.0.2.tar.gz',
   keywords=['IoT', 'smartcity', 'ideam'],
   license="ISC",
   python_requires='>=3.5.4',

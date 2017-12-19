@@ -11,9 +11,9 @@ from sys import platform
 
 
 class Entity(object):
-    """ Entity object represents any of the IoT entities registered with the RBCCPS Smart City middleware.
-    It can do publish, subscribe, bind and unbind operations. Details of these operations are specified in
-    the https://rbccps.org/smartcity .
+    """ The entity object represents any of the IoT entities registered with the RBCCPS IoT Data Exchange & Analytics
+    Middleware (IDEAM). It can do publish, subscribe, historical data, bind and unbind operations.
+    Details of these operations are specified in the https://rbccps.org/smartcity.
 
     """
     def __init__(self, entity_id, entity_api_key):
@@ -42,10 +42,9 @@ class Entity(object):
         return self.subscribe_data
 
     def register(self):
-        """ Registers a new device in the format of entity_id. This device has permissions for services like
-        subscribe, publish, historicData.
+        """ Registers a new device with the name entity_id. This device has permissions for services like subscribe,
+        publish and access historical data.
 
-        Site: http://rbccps.org/smartcity
         """
         register_url = self.base_url + "api/0.1.0/register"
         register_headers = {
@@ -66,7 +65,7 @@ class Entity(object):
 
     @contextlib.contextmanager
     def no_ssl_verification(self):
-        """ Requests module fails due to lets encrypt ssl encryption. """
+        """ Requests module fails due to lets encrypt ssl encryption. Will be fixed in the future release."""
         try:
             from functools import partialmethod
         except ImportError:
@@ -147,7 +146,6 @@ class Entity(object):
         response = dict()
         if "No API key" in str(r.content.decode("utf-8")):
             response["status"] = "failure"
-            r = json.loads(r.content.decode("utf-8"))['message']
         else:
             r = r.content.decode("utf-8")
             response = r
@@ -158,7 +156,7 @@ class Entity(object):
         at least once, before doing a subscribe. Subscribe function will listen to devices that are bound here.
 
         Args:
-            devices_to_bind  (list): a array of devices to listen to.
+            devices_to_bind  (list): an array of devices to listen to.
                                      Example bind(["test100","testDemo"])
 
         """
@@ -191,7 +189,7 @@ class Entity(object):
         """ This function allows an entity to unbound devices that are already bound.
 
         Args:
-            devices_to_unbind (list): a array of devices that are to be unbound ( stop listening)
+            devices_to_unbind (list): an array of devices that are to be unbound ( stop listening)
                                      Example unbind(["test10","testDemo105"])
         """
         if self.entity_api_key == "":
@@ -225,7 +223,7 @@ class Entity(object):
         creates a thread with an event loop to manager the tasks created in start_subscribe_worker.
 
         Args:
-            devices_to_bind (list): a array of devices to listen to
+            devices_to_bind (list): an array of devices to listen to
         """
         if self.entity_api_key == "":
             return {'status': 'failure', 'response': 'No API key found in request'}
@@ -279,8 +277,3 @@ class Entity(object):
         asyncio.gather(*asyncio.Task.all_tasks()).cancel()
         self.event_loop.stop()
         self.event_loop.close()
-
-
-
-
-
