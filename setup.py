@@ -25,7 +25,7 @@ setup(
     "Development Status :: 1 - Alpha",
     "Topic :: Internet",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "License :: OSI Approved :: ISC License",
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS :: MacOS X",
     'Programming Language :: Python',
