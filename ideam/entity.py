@@ -118,7 +118,13 @@ class Entity(object):
         return response
 
     def db(self, entity, query_filters="size=10"):
-        """"""
+        """ This function allows an entity to access the historic data.
+
+        Args:
+            entity        (string): Name of the device to listen to
+            query_filters (string): Elastic search response format string
+                                    example, "pretty=true&size=10"
+        """
         if self.entity_api_key == "":
             return {'status': 'failure', 'response': 'No API key found in request'}
 
@@ -187,7 +193,6 @@ class Entity(object):
         Args:
             devices_to_unbind (list): a array of devices that are to be unbound ( stop listening)
                                      Example unbind(["test10","testDemo105"])
-
         """
         if self.entity_api_key == "":
             return {'status': 'failure', 'response': 'No API key found in request'}
@@ -218,6 +223,9 @@ class Entity(object):
     def subscribe(self, devices_to_bind=[]):
         """ This function allows an entity to subscribe for data from the devices specified in the bind operation. It
         creates a thread with an event loop to manager the tasks created in start_subscribe_worker.
+
+        Args:
+            devices_to_bind (list): a array of devices to listen to
         """
         if self.entity_api_key == "":
             return {'status': 'failure', 'response': 'No API key found in request'}
@@ -229,9 +237,8 @@ class Entity(object):
 
 
     def start_subscribe_worker(self, loop):
-        """Switch to new event loop as a thread and run until complete"""
+        """ Switch to new event loop as a thread and run until complete. """
         url = self.base_url + "api/0.1.0/subscribe"
-        print("0")
         task = loop.create_task(self.asynchronously_get_data(url + "?name={0}".format(self.entity_id)))
         asyncio.set_event_loop(loop)
         loop.run_until_complete(task)
@@ -241,19 +248,14 @@ class Entity(object):
     async def asynchronously_get_data(self, url):
         """ Asynchronously get data from Chunked transfer encoding of https://smartcity.rbccps.org/api/0.1.0/subscribe.
         (Only this function requires Python 3. Rest of the functions can be run in python2.
+
         Args:
-             url (string): url to subscribe to
+             url (string): url to subscribe
         """
-        print(self.entity_api_key)
         headers = {"apikey": self.entity_api_key}
-        print("1")
-        print(url)
         try:
-            print("2")
             async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
-                print("3")
-                async with session.get(url, headers=headers, timeout=300) as response:
-                    print("4")
+                async with session.get(url, headers=headers, timeout=3000) as response:
                     while True:  # loop over for each chunk of data
                         chunk = await response.content.readchunk()
                         if not chunk:
